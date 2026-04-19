@@ -1,4 +1,5 @@
 require('dotenv').config();
+const cors = require('cors');
 
 const express   = require('express');
 const nodemailer = require('nodemailer');
@@ -17,6 +18,9 @@ app.use(helmet({
   contentSecurityPolicy: false // disabled so your portfolio CSS/JS loads fine
 }));
 app.use(express.json({ limit: '10kb' }));
+app.use(cors({
+  origin: 'https://my-portfolio-ywy6.onrender.com'
+}));
 
 // ─────────────────────────────────────────────
 //  RATE LIMITING  —  max 5 submissions per IP
