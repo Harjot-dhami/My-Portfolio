@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Harjot Dhami — Modern Web Developer Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -78,108 +81,121 @@
             background: rgba(108, 99, 255, 0.1);
         }
 
-        /* ── Cinematic Loader ── */
-        .loader {
-            position: fixed; inset: 0;
-            background: #050508;
-            z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
-            flex-direction: column;
+
+
+
+        /* ══════════════════════════════════════════
+           NEW LOADING ANIMATION  — HD Loader
+           ══════════════════════════════════════════ */
+        #hd-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: #050505;
             overflow: hidden;
-            opacity: 1; visibility: visible;
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            font-family: 'Rajdhani', sans-serif;
         }
-        .loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+        #hd-loader.done { pointer-events: none; }
 
-        /* Rotating rings */
-        .loader-ring {
+        #hd-grid {
             position: absolute;
-            width: 300px; height: 300px;
-            border-radius: 50%;
-            border: 1px solid rgba(108,99,255,0.15);
-            animation: ringRotate 8s linear infinite;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+            background-size: 80px 80px;
         }
-        .loader-ring::before {
-            content:''; position:absolute; inset:-1px; border-radius:50%;
-            border: 2px solid transparent;
-            border-top-color: #6C63FF;
-            border-right-color: rgba(108,99,255,0.3);
-            animation: ringRotate 1.6s linear infinite;
+        .hd-corner {
+            position: absolute;
+            z-index: 10;
+            opacity: 0;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 400;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            line-height: 1.7;
         }
-        .loader-ring-2 {
-            width: 240px; height: 240px;
-            border-color: rgba(78,205,196,0.1);
-            animation: ringRotate 5s linear infinite reverse;
-        }
-        .loader-ring-2::before { border-top-color: #4ECDC4; border-right-color: rgba(78,205,196,0.2); animation: ringRotate 2.4s linear infinite reverse; }
-        .loader-ring-3 {
-            width: 180px; height: 180px;
-            border-color: rgba(255,107,157,0.08);
-            animation: ringRotate 9s linear infinite;
-        }
-        @keyframes ringRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        #hd-c-tl { top: 28px; left: 32px; font-size: 20px; color: rgba(255,255,255,0.7); }
+        #hd-c-tc { top: 28px; left: 50%; transform: translateX(-50%); text-align: center; font-size: 12px; color: rgba(255,255,255,0.6); }
+        #hd-c-tr { top: 28px; right: 32px; text-align: right; font-size: 12px; color: rgba(255,255,255,0.6); }
 
-        /* Floating orbs */
-        .loader-orb { position:absolute; border-radius:50%; filter:blur(60px); pointer-events:none; }
-        .loader-orb-1 { width:200px;height:200px;background:rgba(108,99,255,0.2);top:15%;left:10%;animation:orbDrift 4s ease infinite; }
-        .loader-orb-2 { width:150px;height:150px;background:rgba(78,205,196,0.15);bottom:15%;right:10%;animation:orbDrift 5s ease infinite reverse; }
-        .loader-orb-3 { width:100px;height:100px;background:rgba(255,107,157,0.12);top:55%;left:58%;animation:orbDrift 3.5s ease infinite 0.5s; }
-        @keyframes orbDrift { 0%,100%{transform:translate(0,0)} 50%{transform:translate(18px,-18px)} }
-
-        /* Grid lines */
-        .loader-grid {
-            position:absolute; inset:0;
-            background-image: linear-gradient(rgba(108,99,255,0.05) 1px,transparent 1px),
-                              linear-gradient(90deg,rgba(108,99,255,0.05) 1px,transparent 1px);
-            background-size: 55px 55px;
+        #hd-stage {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
         }
-
-        /* Centre content */
-        .loader-center { position:relative; z-index:2; text-align:center; }
-
-        .loader-icon {
-            width: 70px; height: 70px;
-            background: linear-gradient(135deg,#6C63FF,#4ECDC4);
-            border-radius: 18px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 22px;
-            font-size: 1.9rem;
-            box-shadow: 0 0 40px rgba(108,99,255,0.5), 0 0 80px rgba(108,99,255,0.2);
-            animation: iconPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) 0s both;
+        #hd-logo-wrap {
+            position: relative;
+            width: 220px;
+            height: 140px;
+            will-change: transform;
         }
-        @keyframes iconPop { from{transform:scale(0) rotate(-15deg);opacity:0} to{transform:scale(1) rotate(0);opacity:1} }
-
-        .loader-name {
-            font-size: 2.2rem; font-weight: 900; letter-spacing: -1px;
-            background: linear-gradient(135deg,#fff 40%,#6C63FF 100%);
-            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-            animation: nameSlide 0.5s cubic-bezier(0.25,0.46,0.45,0.94) 0.15s both;
+        .hd-frag {
+            position: absolute;
+            inset: 0;
+            will-change: transform, opacity, filter;
         }
-        @keyframes nameSlide { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
-
-        .loader-tagline {
-            font-size: 0.75rem; font-weight: 500;
-            letter-spacing: 4px; text-transform: uppercase;
-            color: rgba(255,255,255,0.3); margin-top: 8px;
-            animation: nameSlide 0.5s ease 0.25s both;
+        #hd-tagline {
+            margin-top: 36px;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.38em;
+            color: rgba(255,255,255,0.65);
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(8px);
         }
-
-        /* Progress bar */
-        .loader-progress-wrap { width: 180px; margin: 24px auto 0; animation: nameSlide 0.4s ease 0.3s both; }
-        .loader-progress-track { height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; position: relative; }
-        .loader-progress-fill { height: 100%; background: linear-gradient(90deg,#6C63FF,#4ECDC4); border-radius: 2px; width: 0; transition: width 0.08s linear; }
-        .loader-progress-glow { position:absolute; top:-2px; right:0; width:16px; height:6px; background:radial-gradient(ellipse,rgba(108,99,255,0.9),transparent); border-radius:50%; filter:blur(2px); }
-        .loader-pct { font-family:'JetBrains Mono',monospace; font-size:0.65rem; color:rgba(255,255,255,0.3); text-align:right; margin-top:6px; }
-
-        /* Curtain split exit */
-        .loader-curtain-top, .loader-curtain-bottom {
-            position:absolute; left:0; width:100%; background:#050508; z-index:3;
-            transition: transform 0.7s cubic-bezier(0.77,0,0.175,1);
+        #hd-loader-wrap {
+            margin-top: 28px;
+            position: relative;
+            width: 300px;
+            height: 3px;
+            opacity: 0;
         }
-        .loader-curtain-top { top:0; height:50%; }
-        .loader-curtain-bottom { bottom:0; height:50%; }
-        .loader.curtain-open .loader-curtain-top { transform: translateY(-100%); }
-        .loader.curtain-open .loader-curtain-bottom { transform: translateY(100%); }
+        #hd-loader-track {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.15);
+        }
+        #hd-loader-fill {
+            position: absolute;
+            inset: 0;
+            background: rgba(220,228,240,0.9);
+            transform-origin: left center;
+            transform: scaleX(0);
+            will-change: transform;
+        }
+        #hd-pct {
+            position: absolute;
+            top: -22px;
+            right: 0;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            color: rgba(255,255,255,0.55);
+            font-family: 'Rajdhani', sans-serif;
+            opacity: 0;
+        }
+        #hd-flash {
+            position: absolute;
+            inset: 0;
+            background: #fff;
+            opacity: 0;
+            z-index: 100;
+            pointer-events: none;
+        }
+        /* Portfolio fade-in wrapper — starts invisible, becomes visible after loader */
+        #hd-site-wrapper {
+            opacity: 0;
+            will-change: opacity;
+        }
+        /* ══ END NEW LOADER CSS ══ */
 
         /* Canvas Background */
         #bg-canvas {
@@ -2024,31 +2040,128 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
 
-    <!-- Cinematic Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="loader-curtain-top"></div>
-        <div class="loader-curtain-bottom"></div>
-        <div class="loader-grid"></div>
-        <div class="loader-orb loader-orb-1"></div>
-        <div class="loader-orb loader-orb-2"></div>
-        <div class="loader-orb loader-orb-3"></div>
-        <div class="loader-ring"></div>
-        <div class="loader-ring loader-ring-2"></div>
-        <div class="loader-ring loader-ring-3"></div>
-        <div class="loader-center">
-            <div class="loader-icon">✦</div>
-            <div class="loader-name">Harjot Dhami</div>
-            <div class="loader-tagline">Web Designer & Developer</div>
-            <div class="loader-progress-wrap">
-                <div class="loader-progress-track">
-                    <div class="loader-progress-fill" id="loaderFill"></div>
-                    <div class="loader-progress-glow"></div>
+    <!-- ══ NEW HD LOADING ANIMATION ══ -->
+    <div id="hd-loader">
+        <div id="hd-grid"></div>
+        <div class="hd-corner" id="hd-c-tl">Harjot Dhami®</div>
+        <div class="hd-corner" id="hd-c-tc">Designed to Impress. Built to Convert.</div>
+        <div class="hd-corner" id="hd-c-tr">Available Worldwide</div>
+        <div id="hd-flash"></div>
+        <div id="hd-stage">
+            <div id="hd-logo-wrap">
+                <!-- Master (hidden, used as reference) -->
+                <svg id="hd-logo-master" xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 220 140" width="220" height="140"
+                     style="position:absolute;inset:0;opacity:0;pointer-events:none">
+                    <defs>
+                        <linearGradient id="hd-sg" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%"   stop-color="#e8e8e8"/>
+                            <stop offset="38%"  stop-color="#c8c8c8"/>
+                            <stop offset="70%"  stop-color="#d4d4d4"/>
+                            <stop offset="100%" stop-color="#b0b0b0"/>
+                        </linearGradient>
+                        <linearGradient id="hd-sh" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%"   stop-color="rgba(0,0,0,0.12)"/>
+                            <stop offset="45%"  stop-color="rgba(255,255,255,0.04)"/>
+                            <stop offset="100%" stop-color="rgba(0,0,0,0.08)"/>
+                        </linearGradient>
+                    </defs>
+                    <rect x="18" y="18" width="32" height="104" fill="url(#hd-sg)"/>
+                    <rect x="86" y="18" width="32" height="104" fill="url(#hd-sg)"/>
+                    <rect x="18" y="63" width="100" height="16" fill="url(#hd-sg)"/>
+                    <rect x="118" y="18" width="16" height="104" fill="url(#hd-sg)"/>
+                    <path d="M134,18 Q202,18 202,70 Q202,122 134,122 L134,18 Z" fill="url(#hd-sg)"/>
+                    <rect x="18" y="18" width="184" height="104" fill="url(#hd-sh)" style="mix-blend-mode:multiply"/>
+                    <polygon points="143,18 152,18 110,122 101,122" fill="#050505" opacity="0.95"/>
+                    <line x1="143" y1="18" x2="101" y2="122" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+                </svg>
+
+                <!-- Fragment Top-Left -->
+                <div class="hd-frag" id="hd-f-tl" style="clip-path:polygon(0 0, 67.3% 0, 67.3% 12.9%, 50% 32.9%, 0 32.9%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140" width="220" height="140">
+                        <defs><linearGradient id="hd-sg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="38%" stop-color="#c8c8c8"/><stop offset="70%" stop-color="#d4d4d4"/><stop offset="100%" stop-color="#b0b0b0"/></linearGradient></defs>
+                        <rect x="18" y="18" width="32" height="104" fill="url(#hd-sg2)"/>
+                        <rect x="86" y="18" width="32" height="104" fill="url(#hd-sg2)"/>
+                        <rect x="18" y="63" width="100" height="16" fill="url(#hd-sg2)"/>
+                        <rect x="118" y="18" width="16" height="104" fill="url(#hd-sg2)"/>
+                        <path d="M134,18 Q202,18 202,70 Q202,122 134,122 L134,18 Z" fill="url(#hd-sg2)"/>
+                        <polygon points="143,18 152,18 110,122 101,122" fill="#050505" opacity="0.95"/>
+                    </svg>
                 </div>
-                <div class="loader-pct" id="loaderPercent">0%</div>
+                <!-- Fragment Top-Right -->
+                <div class="hd-frag" id="hd-f-tr" style="clip-path:polygon(67.3% 0, 100% 0, 100% 32.9%, 50% 32.9%, 67.3% 12.9%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140" width="220" height="140">
+                        <defs><linearGradient id="hd-sg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="38%" stop-color="#c8c8c8"/><stop offset="70%" stop-color="#d4d4d4"/><stop offset="100%" stop-color="#b0b0b0"/></linearGradient></defs>
+                        <rect x="18" y="18" width="32" height="104" fill="url(#hd-sg3)"/>
+                        <rect x="86" y="18" width="32" height="104" fill="url(#hd-sg3)"/>
+                        <rect x="18" y="63" width="100" height="16" fill="url(#hd-sg3)"/>
+                        <rect x="118" y="18" width="16" height="104" fill="url(#hd-sg3)"/>
+                        <path d="M134,18 Q202,18 202,70 Q202,122 134,122 L134,18 Z" fill="url(#hd-sg3)"/>
+                        <polygon points="143,18 152,18 110,122 101,122" fill="#050505" opacity="0.95"/>
+                    </svg>
+                </div>
+                <!-- Fragment Mid-Left -->
+                <div class="hd-frag" id="hd-f-ml" style="clip-path:polygon(0 32.9%, 50% 32.9%, 58.2% 65.7%, 0 65.7%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140" width="220" height="140">
+                        <defs><linearGradient id="hd-sg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="38%" stop-color="#c8c8c8"/><stop offset="70%" stop-color="#d4d4d4"/><stop offset="100%" stop-color="#b0b0b0"/></linearGradient></defs>
+                        <rect x="18" y="18" width="32" height="104" fill="url(#hd-sg4)"/>
+                        <rect x="86" y="18" width="32" height="104" fill="url(#hd-sg4)"/>
+                        <rect x="18" y="63" width="100" height="16" fill="url(#hd-sg4)"/>
+                        <rect x="118" y="18" width="16" height="104" fill="url(#hd-sg4)"/>
+                        <path d="M134,18 Q202,18 202,70 Q202,122 134,122 L134,18 Z" fill="url(#hd-sg4)"/>
+                        <polygon points="143,18 152,18 110,122 101,122" fill="#050505" opacity="0.95"/>
+                    </svg>
+                </div>
+                <!-- Fragment Mid-Right -->
+                <div class="hd-frag" id="hd-f-mr" style="clip-path:polygon(50% 32.9%, 100% 32.9%, 100% 65.7%, 58.2% 65.7%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140" width="220" height="140">
+                        <defs><linearGradient id="hd-sg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="38%" stop-color="#c8c8c8"/><stop offset="70%" stop-color="#d4d4d4"/><stop offset="100%" stop-color="#b0b0b0"/></linearGradient></defs>
+                        <rect x="18" y="18" width="32" height="104" fill="url(#hd-sg5)"/>
+                        <rect x="86" y="18" width="32" height="104" fill="url(#hd-sg5)"/>
+                        <rect x="18" y="63" width="100" height="16" fill="url(#hd-sg5)"/>
+                        <rect x="118" y="18" width="16" height="104" fill="url(#hd-sg5)"/>
+                        <path d="M134,18 Q202,18 202,70 Q202,122 134,122 L134,18 Z" fill="url(#hd-sg5)"/>
+                        <polygon points="143,18 152,18 110,122 101,122" fill="#050505" opacity="0.95"/>
+                    </svg>
+                </div>
+                <!-- Fragment Bottom-Left -->
+                <div class="hd-frag" id="hd-f-bl" style="clip-path:polygon(0 65.7%, 58.2% 65.7%, 48.2% 87.1%, 0 100%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140" width="220" height="140">
+                        <defs><linearGradient id="hd-sg6" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="38%" stop-color="#c8c8c8"/><stop offset="70%" stop-color="#d4d4d4"/><stop offset="100%" stop-color="#b0b0b0"/></linearGradient></defs>
+                        <rect x="18" y="18" width="32" height="104" fill="url(#hd-sg6)"/>
+                        <rect x="86" y="18" width="32" height="104" fill="url(#hd-sg6)"/>
+                        <rect x="18" y="63" width="100" height="16" fill="url(#hd-sg6)"/>
+                        <rect x="118" y="18" width="16" height="104" fill="url(#hd-sg6)"/>
+                        <path d="M134,18 Q202,18 202,70 Q202,122 134,122 L134,18 Z" fill="url(#hd-sg6)"/>
+                        <polygon points="143,18 152,18 110,122 101,122" fill="#050505" opacity="0.95"/>
+                    </svg>
+                </div>
+                <!-- Fragment Bottom-Right -->
+                <div class="hd-frag" id="hd-f-br" style="clip-path:polygon(58.2% 65.7%, 100% 65.7%, 100% 100%, 48.2% 87.1%)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140" width="220" height="140">
+                        <defs><linearGradient id="hd-sg7" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8e8e8"/><stop offset="38%" stop-color="#c8c8c8"/><stop offset="70%" stop-color="#d4d4d4"/><stop offset="100%" stop-color="#b0b0b0"/></linearGradient></defs>
+                        <rect x="18" y="18" width="32" height="104" fill="url(#hd-sg7)"/>
+                        <rect x="86" y="18" width="32" height="104" fill="url(#hd-sg7)"/>
+                        <rect x="18" y="63" width="100" height="16" fill="url(#hd-sg7)"/>
+                        <rect x="118" y="18" width="16" height="104" fill="url(#hd-sg7)"/>
+                        <path d="M134,18 Q202,18 202,70 Q202,122 134,122 L134,18 Z" fill="url(#hd-sg7)"/>
+                        <polygon points="143,18 152,18 110,122 101,122" fill="#050505" opacity="0.95"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div id="hd-tagline">Web Designer &amp; Developer</div>
+
+            <div id="hd-loader-wrap">
+                <div id="hd-loader-track"></div>
+                <div id="hd-loader-fill"></div>
+                <span id="hd-pct">0%</span>
             </div>
         </div>
     </div>
+    <!-- ══ END NEW HD LOADING ANIMATION ══ -->
 
+    <div id="hd-site-wrapper">
     <!-- Background Canvas -->
     <canvas id="bg-canvas"></canvas>
     <div class="noise-overlay"></div>
@@ -3063,35 +3176,122 @@
     </footer>
 
     <script>
-        // ── Loader — shows ONCE per session, instant start, 1.6s total ──
-        (function(){
-            const loader = document.getElementById('loader');
-            const fill   = document.getElementById('loaderFill');
-            const pct    = document.getElementById('loaderPercent');
+        // ══════════════════════════════════════════════════════════
+        //  NEW HD LOADING ANIMATION  —  GSAP powered
+        //  Seamless transition into portfolio (dark → dark, no flash)
+        // ══════════════════════════════════════════════════════════
+        (function () {
+            const hdLoader  = document.getElementById('hd-loader');
+            const siteWrap  = document.getElementById('hd-site-wrapper');
 
-            if(sessionStorage.getItem('hd_seen')){
-                loader.style.display = 'none';
+            // Skip animation on repeat visits
+            if (sessionStorage.getItem('hd_seen')) {
+                hdLoader.style.display = 'none';
+                siteWrap.style.opacity = '1';
                 return;
             }
 
-            // Fast fill: 0→100 in ~1.0s then curtain open at 1.0s, hidden at 1.6s
-            let p = 0;
-            const duration = 1000; // ms to reach 100%
-            const interval = 20;
-            const increment = 100 / (duration / interval);
+            const gsap = window.gsap;
+            const $    = id => document.getElementById(id);
 
-            const timer = setInterval(()=>{
-                p = Math.min(p + increment + Math.random() * 2, 100);
-                fill.style.width = p + '%';
-                pct.textContent = Math.floor(p) + '%';
-                if(p >= 100){
-                    clearInterval(timer);
-                    fill.style.width = '100%';
-                    pct.textContent = '100%';
-                    setTimeout(()=>{ loader.classList.add('curtain-open'); }, 100);
-                    setTimeout(()=>{ loader.classList.add('hidden'); sessionStorage.setItem('hd_seen','1'); }, 800);
+            const grid      = $('hd-grid');
+            const cTL       = $('hd-c-tl');
+            const cTC       = $('hd-c-tc');
+            const cTR       = $('hd-c-tr');
+            const tagline   = $('hd-tagline');
+            const loaderWrap= $('hd-loader-wrap');
+            const loaderFill= $('hd-loader-fill');
+            const pctEl     = $('hd-pct');
+            const flash     = $('hd-flash');
+            const logoWrap  = $('hd-logo-wrap');
+
+            const frags = [
+                { el: $('hd-f-tl'), ox: -18, oy: -10 },
+                { el: $('hd-f-tr'), ox:  16, oy: -12 },
+                { el: $('hd-f-ml'), ox: -12, oy:   0 },
+                { el: $('hd-f-mr'), ox:  14, oy:   2 },
+                { el: $('hd-f-bl'), ox: -10, oy:  10 },
+                { el: $('hd-f-br'), ox:  12, oy:  12 },
+            ];
+
+            frags.forEach(f => gsap.set(f.el, { x: f.ox, y: f.oy, opacity: 0.28, filter: 'blur(3.5px)' }));
+
+            const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+            // Grid flicker
+            tl.to(grid, { opacity: 1, duration: 0.5, ease: 'power2.in' }, 0.1)
+              .to(grid, { opacity: 0, duration: 0.6, ease: 'power2.out' }, 1.0);
+
+            // Corner labels
+            tl.to([cTL, cTC, cTR], { opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power2.out' }, 0.3);
+
+            // Fragments appear (fragmented)
+            tl.to(frags.map(f => f.el), { opacity: 0.55, duration: 0.6, stagger: 0.04, ease: 'power2.out' }, 0.5);
+
+            // Fragments lock together
+            tl.to(frags.map(f => f.el), {
+                x: 0, y: 0, opacity: 1, filter: 'blur(0px)',
+                duration: 0.85,
+                stagger: { amount: 0.18, from: 'center' },
+                ease: 'expo.out'
+            }, 1.4);
+
+            // Light sweep
+            const sw = document.createElement('div');
+            sw.style.cssText = 'position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:2;border-radius:2px;';
+            const swInner = document.createElement('div');
+            swInner.style.cssText = 'position:absolute;top:0;left:-50%;width:35%;height:100%;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,0.05) 35%,rgba(255,255,255,0.10) 50%,rgba(255,255,255,0.05) 65%,transparent 100%);transform:skewX(-10deg);opacity:0;';
+            sw.appendChild(swInner);
+            logoWrap.appendChild(sw);
+            tl.to(swInner, { left: '120%', opacity: 1, duration: 0.7, ease: 'power2.inOut' }, 2.35);
+            tl.to(swInner, { opacity: 0, duration: 0.2 }, 2.9);
+
+            // Tagline
+            tl.to(tagline, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 2.5);
+
+            // Loader bar + counter
+            tl.to(loaderWrap, { opacity: 1, duration: 0.4 }, 2.65);
+            tl.to(pctEl,      { opacity: 1, duration: 0.3 }, 2.7);
+            tl.to(loaderFill, { scaleX: 1,  duration: 0.78, ease: 'power2.inOut' }, 2.75);
+
+            let counterObj = { val: 0 };
+            tl.to(counterObj, {
+                val: 100, duration: 0.78, ease: 'power2.inOut',
+                onUpdate: () => { pctEl.textContent = Math.round(counterObj.val) + '%'; }
+            }, 2.75);
+
+            // Loader UI fades out
+            tl.to(loaderFill, { opacity: 0, duration: 0.15, ease: 'none' }, 3.6);
+            tl.to([loaderWrap, pctEl], { opacity: 0, duration: 0.25 }, 3.6);
+            tl.to([cTL, cTC, cTR, tagline], { opacity: 0, duration: 0.5, stagger: 0.04, ease: 'power2.in' }, 3.65);
+            tl.to(grid, { opacity: 0, duration: 0.3 }, 3.65);
+
+            // White flash
+            tl.to(flash, { opacity: 0.92, duration: 0.18, ease: 'power2.in' }, 4.1);
+            tl.to(flash, { opacity: 0,    duration: 0.35, ease: 'power2.out' }, 4.28);
+
+            // Logo drops down and out
+            tl.to(logoWrap, { y: 220, opacity: 0, filter: 'blur(6px)', duration: 0.7, ease: 'power3.in' }, 4.25);
+
+            // ── SEAMLESS TRANSITION ──
+            // The loader overlay fades to transparent (dark background) while the
+            // portfolio (also dark) fades in simultaneously — no pop, no cut.
+            // Both backgrounds are #050505 / #0a0a0f — visually identical, so the
+            // cross-fade is invisible and feels like one continuous experience.
+            tl.to(hdLoader, {
+                opacity: 0,
+                duration: 0.55,
+                ease: 'power2.inOut',
+                onStart: function () {
+                    // Begin fading the site in at the same time the loader fades out
+                    gsap.to(siteWrap, { opacity: 1, duration: 0.65, ease: 'power2.out' });
+                },
+                onComplete: function () {
+                    hdLoader.style.display = 'none';
+                    sessionStorage.setItem('hd_seen', '1');
                 }
-            }, interval);
+            }, 4.85);
+
         })();
 
         // Custom Cursor
@@ -3417,5 +3617,6 @@
             });
         });
     </script>
+    </div><!-- #hd-site-wrapper -->
 </body>
 </html>
